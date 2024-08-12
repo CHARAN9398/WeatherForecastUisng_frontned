@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        header {
+            background-color: rgb(247, 246, 246);
+            width: 70%;
+            padding: 10px;
+            border-radius: 15px;
+            margin: auto;
+        }
+        h1 {
+            color: rgb(5, 5, 5);
+            font-family: cursive; 
+            text-align: center;
+        }
+        body {
+            background-image: url('https://images.pexels.com/photos/46160/field-clouds-sky-earth-46160.jpeg');
+            background-size: cover; 
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            margin-top: 150px;
+        }
+        .button {
+            border-radius: 30px;
+            margin-left: 10px;
+            padding: 15px 20px;
+            background-color: rgb(228, 37, 37);
+            color: white;
+        }
+        input {
+            padding: 15px;
+            width: 30%;
+            border-radius: 30px;
+            border-color: rgb(0, 0, 0);
+        } 
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-style: oblique;
+            font-size: 22px;
+            margin-top: 60px;
+            color: rgb(0, 0, 0);
+        }
+        .weather-info img {
+            width: 50px; /* Adjust size as needed */
+            height: auto;
+            margin-top: 10px;
+        }
+    
+    </style>
+    <script src="https://kit.fontawesome.com/b77cf93ff0.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>Weather Forecast</h1>
+    </header>
+    <form>
+        <input type="text" id="city" placeholder="Enter Location" autofocus>
+        <button type="button" class="button" onclick="getWeather()">Search</button>
+    </form>
+
+    <div class="weather-info" id="weather-info">
+        <div id="city-name"></div>
+        <div id="temperature-images"></div>
+        <div id="temperature"></div>
+        <div id="humidity"></div>
+        
+    </div>
+
+    <script>
+        function getWeather() {
+            const apiKey = 'ea9a510e6fb74b18a43104332242907';
+            const city = document.getElementById('city').value;
+            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const temperature = data.current.temp_c;
+                    const humidity = data.current.humidity;
+                    
+                    const temperatureImage = document.getElementById('temperature-images');
+                    temperatureImage.innerHTML = ''; 
+
+                    const tempImage = temperature > 30 
+                    ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrSzQqBMTkxp4F7U0iT7_ARlBjywSx2LM-pA&s' 
+                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPhZnuSzsBXR7_p7YO4Nx-5KvGaArQDuY-WA&s';
+                    const imgElement = document.createElement('img');
+                    imgElement.src = tempImage;
+                    temperatureImage.appendChild(imgElement);
+
+                    document.getElementById('city-name').textContent = `City: ${city}`;
+                    document.getElementById('temperature').textContent = `Temperature: ${temperature} °C`;
+                    document.getElementById('humidity').textContent = `Humidity: ${humidity} %`;
+                });
+        }
+    </script>   
+</body>
+</html>
